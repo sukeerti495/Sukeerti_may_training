@@ -1,0 +1,29 @@
+import pandas as pd
+import numpy as np
+df = pd.read_csv("students.csv")
+numeric_cols = ['age', 'math_score', 'science_score', 'attendance']
+
+for col in numeric_cols:
+    df[col] = pd.to_numeric(df[col], errors='coerce')
+    df[col].fillna(df[col].mean(), inplace=True)
+
+df['gender'].fillna(df['gender'].mode()[0], inplace=True)
+df['name'].fillna("Unknown", inplace=True)
+
+print("Missing values handled")
+df['age'] = pd.to_numeric(df['age'], errors='coerce')
+df['age'].fillna(df['age'].mean(), inplace=True)
+print("\nCorrected Age Column")
+print(df['age'])
+df['exam_date'] = pd.to_datetime(df['exam_date'], errors='coerce')
+print("\nExam Date Column:")
+print(df['exam_date'])
+df['math_score'].replace(999, np.nan, inplace=True)
+df['science_score'].replace(999, np.nan, inplace=True)
+df['math_score'].fillna(df['math_score'].mean(), inplace=True)
+df['science_score'].fillna(df['science_score'].mean(), inplace=True)
+
+print("\nOutliers Handled")
+print("\nBefore Removing Duplicates:", df.shape)
+df.drop_duplicates(inplace=True)
+print("After Removing Duplicates:", df.shape)
